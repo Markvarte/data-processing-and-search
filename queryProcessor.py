@@ -1,3 +1,5 @@
+import itertools
+
 import filesHandler
 import postingsHandler
 import math
@@ -7,34 +9,31 @@ def process_query(postings_dict, query_file_name='query.txt', result_file_name='
     all_queries_list = filesHandler.split_query(query_file_name)
     for query in all_queries_list:
         selected_postings_dict = postingsHandler.get_all_postings_by_query(postings_dict, query)
-        # query_and(selected_postings_dict)
+        intercept_with_skips = query_and(selected_postings_dict)
+        print(intercept_with_skips)
         # queryOr
         filesHandler.write_selected_postings(selected_postings_dict, result_file_name)
 
 
-# def query_and(selected_postings_dict: dict):
-#     and_ids = []
-#     term_count = len(selected_postings_dict)
-#     if term_count < 2:
-#         return selected_postings_dict.values()
-#     if term_count == 2:
-#         # !!!
-#         return intercept_with_skips(selected_postings_dict.values(), selected_postings_dict[1])
-#     elif term_count > 2:
-#         # kak to loop
-
-    each_posting_count = []
-    postings_list = []
-    # for key, val in selected_postings_dict.items():
-    #     each_posting_count.append(len(val))
-    #     postings_list.append([val])
-    # print("each_posting_count",each_posting_count)
-    # smallest_posting_index = 0
-    # posting_num = 0
-    # while smallest_posting_index < min(each_posting_count):
-    #     while posting_num < term_count:
-    #         if
-    #         posting_num += 1
+def query_and(selected_postings_dict: dict):
+    term_count = len(selected_postings_dict)
+    if term_count < 2:
+        return 'term count less that 2, can\'t do AND query'
+    else:
+        result_posting_list = []
+        for key, val in selected_postings_dict.items():
+            result_posting_list.append(val)
+        while len(result_posting_list) != 1:
+            # insert at the beginning of list to make shorter lists process first: that reduce doc id needed to check
+            result_posting_list.insert(0, intercept_with_skips(result_posting_list[0], result_posting_list[1]))
+            # need to delete 2 items from list because we already found intercept between them and put it on 0 index
+            del result_posting_list[1], result_posting_list[1]
+        # merging list in list to one list
+        result_intercept_list = list(itertools.chain.from_iterable(result_posting_list))
+        if result_intercept_list:
+            return result_intercept_list
+        else:
+            return 'empty'
 
 
 def intercept_with_skips(p1, p2):
