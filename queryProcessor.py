@@ -12,14 +12,14 @@ def process_query(postings_dict, query_file_name='query.txt', result_file_name='
         intercept_with_skips_list = query_and(selected_postings_dict)
         join_postings_list = query_or(selected_postings_dict)
         filesHandler.write_selected_postings(selected_postings_dict, result_file_name)
-        # file write and
-        # file write or
+        filesHandler.write_query(query, intercept_with_skips_list, result_file_name)
+        filesHandler.write_query(query, join_postings_list, result_file_name, is_and=False)
 
 
 def query_and(selected_postings_dict):
     term_count = len(selected_postings_dict)
     if term_count < 2:
-        return 'term count less that 2, can\'t do AND query'
+        return ['term count less that 2, can\'t do AND query']
     else:
         result_posting_list = []
         for key, val in selected_postings_dict.items():
@@ -39,7 +39,7 @@ def query_and(selected_postings_dict):
 
 def intercept_with_skips(p1, p2):
     if not p1 or not p2:
-        return 'empty'
+        return ['empty']
     p1_with_skips = add_skips(p1)
     p2_with_skips = add_skips(p2)
     intercept = []

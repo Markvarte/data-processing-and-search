@@ -24,6 +24,20 @@ def write_selected_postings(postings_dict, result_file):
         fw.write("\n")
 
 
+def write_query(query, postings_list, result_file, is_and=True):
+    with open(result_file, 'a') as fw:
+        if is_and:
+            fw.write('QueryAnd\n')
+        else:
+            fw.write('QueryOr\n')
+        for term in query:
+            fw.write(term + " ")
+        fw.write("\nResults: ")
+        for doc_id in postings_list:
+            fw.write(doc_id + " ")
+        fw.write("\n\n")
+
+
 def split_query(query_file):
     query_list = []
     all_queries_list = []
