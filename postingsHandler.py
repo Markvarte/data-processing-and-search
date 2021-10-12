@@ -38,4 +38,4 @@ def get_posting(postings_dict, term):
     for key, val in postings_dict.items():
         if term == key:
             return val
-    return 'empty'
+    return []
