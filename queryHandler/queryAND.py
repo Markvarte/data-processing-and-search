@@ -1,19 +1,5 @@
 import itertools
-
-import filesHandler
-import postingsHandler
 import math
-
-
-def process_query(postings_dict, query_file_name='query.txt', result_file_name='result.txt'):
-    all_queries_list = filesHandler.split_query(query_file_name)
-    for query in all_queries_list:
-        selected_postings_dict = postingsHandler.get_all_postings_by_query(postings_dict, query)
-        intercept_with_skips_list = query_and(selected_postings_dict)
-        join_postings_list = query_or(selected_postings_dict)
-        filesHandler.write_selected_postings(selected_postings_dict, result_file_name)
-        filesHandler.write_query(query, intercept_with_skips_list, result_file_name)
-        filesHandler.write_query(query, join_postings_list, result_file_name, is_and=False)
 
 
 def query_and(selected_postings_dict):
@@ -88,17 +74,3 @@ def next_skip(start_index, posting_list):
         start_index += 1
     else:
         return False
-
-
-def query_or(selected_postings_dict: dict):
-    join_set = set()
-    for key, val in selected_postings_dict.items():
-        for item in val:
-            join_set.add(item)
-    if join_set:
-        join_list = list(join_set)
-        # .sort() return None.
-        join_list.sort()
-        return join_list
-    else:
-        return ['empty']

@@ -1,11 +1,10 @@
-import filesHandler
-import termWithIdsUtil
-import postingsHandler
+from IOfilesHandler import inputHandler
+from utils import termWithIdsUtil
+from invertedIndex import postingsHandler
 
 
 def create_inverted_index(file_name='sample.txt'):
-    terms_with_ids_list = filesHandler.create_terms_with_id_list(file_name)
-    create_dictionary(terms_with_ids_list)
+    terms_with_ids_list = inputHandler.create_terms_with_id_list(file_name)
     unique_terms_with_id_list = termWithIdsUtil.remove_duplicates_in_term_ids_list(terms_with_ids_list)
     return postingsHandler.create_postings(unique_terms_with_id_list)
 
