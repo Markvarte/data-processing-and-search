@@ -9,12 +9,9 @@ def write_selected_postings(postings_dict, result_file):
         fw.write("\n")
 
 
-def write_query(query, postings_list, result_file, is_and=True):
+def write_query(query, postings_list, result_file, query_title):
     with open(result_file, 'a') as fw:
-        if is_and:
-            fw.write('QueryAnd\n')
-        else:
-            fw.write('QueryOr\n')
+        fw.write(f'{query_title}\n')
         for term in query:
             fw.write(term + " ")
         fw.write("\nResults: ")

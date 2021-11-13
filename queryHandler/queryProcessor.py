@@ -11,10 +11,13 @@ def process_query(postings_dict, main_file_name='simple-sample.txt', query_file_
         selected_postings_dict = postingsHandler.get_all_postings_by_query(postings_dict, query)
         intercept_with_skips_list = queryAND.query_and(selected_postings_dict)
         join_postings_list = queryOR.query_or(selected_postings_dict)
+        ranked_intercept_postings_list = scoreCounter.create_ranked_posting_list(docs_for_TFIDF_dict, term_counts_in_docs_dict, selected_postings_dict, intercept_with_skips_list)
+        ranked_joining_postings_list = scoreCounter.create_ranked_posting_list(docs_for_TFIDF_dict, term_counts_in_docs_dict, selected_postings_dict, join_postings_list)
         outputHandler.write_selected_postings(selected_postings_dict, result_file_name)
-        outputHandler.write_query(query, intercept_with_skips_list, result_file_name)  # write and query
-        outputHandler.write_query(query, join_postings_list, result_file_name, is_and=False)  # write or query
-        tfidf_score = scoreCounter.find_tfidf_score(docs_for_TFIDF_dict, term_counts_in_docs_dict, selected_postings_dict, join_postings_list)
+        outputHandler.write_query(query, intercept_with_skips_list, result_file_name, 'QueryAnd')  # write and query
+        outputHandler.write_query(query, ranked_intercept_postings_list, result_file_name, 'TF-IDF')  # write TF-IDF ranked list
+        outputHandler.write_query(query, join_postings_list, result_file_name, 'QueryOr')  # write or query
+        outputHandler.write_query(query, ranked_joining_postings_list, result_file_name, 'TF-IDF')  # write TF-IDF ranked list
 
 
 def TFIDF_preparation(main_file_name):
