@@ -1,5 +1,5 @@
 # Creates terms with document ids list
-def create_terms_with_id_list(file_name='sample.txt'):
+def create_terms_with_id_list(file_name):
     terms_with_id = []
     with open(file_name, 'r') as f:
         for line in f:
@@ -11,6 +11,16 @@ def create_terms_with_id_list(file_name='sample.txt'):
     # Sort list, first by term, second by id.
     terms_with_id.sort()
     return terms_with_id
+
+
+def create_docs_terms_dict(file_name):
+    docs = {}
+    with open(file_name, 'r') as f:
+        for line in f:
+            # first 4 chars = doc id, other doc content
+            # { docid : ['word1', 'word2', 'word3', ... ] }
+            docs[line[:4]] = line[5:].split()
+    return docs
 
 
 def split_query(query_file):
