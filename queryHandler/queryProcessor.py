@@ -4,7 +4,7 @@ from TFIDF import scoreCounter, termCounter
 from queryHandler import queryOR, queryAND
 
 
-def process_query(postings_dict, main_file_name='simple-sample.txt', query_file_name='simple-query.txt', result_file_name='result.txt'):
+def process_query(postings_dict, main_file_name='sample.txt', query_file_name='query.txt', result_file_name='result.txt'):
     all_queries_list = inputHandler.split_query(query_file_name)
     [docs_for_TFIDF_dict, term_counts_in_docs_dict] = TFIDF_preparation(main_file_name)
     for query in all_queries_list:
