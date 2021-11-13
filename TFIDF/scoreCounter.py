@@ -1,17 +1,19 @@
 from TFIDF import TFIDFCounter
 
 
-def find_score(all_docs: dict, term_counts_in_docs_dict: dict, selected_postings_dict: dict, join_postings_list: list):
+def find_tfidf_score(all_docs: dict, term_counts_in_docs_dict: dict, selected_postings_dict: dict, join_postings_list: list):
     # not for query term: term_counts_in_docs_dict - all { doc_id: Counter({'Thi': 1, 'Jane': 1, 'Austen': 1, ...}), doc_id2 ... } dictionary
     # for one query terms: selected_postings_dict - dictionary, keys = terms, vals = postings
     # for one query terms: join_postings_list - all distinct postings
     [all_query_terms_freq, doc_amount_per_term] = get_terms_freq_per_doc(term_counts_in_docs_dict, selected_postings_dict)
     each_selected_doc_size = get_each_selected_doc_size(all_docs, join_postings_list)
-
+    # tf = {'{docId}{term}' : score, '{docId}{term}' : score, , ...}
     tf = TFIDFCounter.count_TF(all_query_terms_freq, each_selected_doc_size)
+    # idf = {term : score, term : score, ...}
     idf = TFIDFCounter.count_IDF(len(term_counts_in_docs_dict), doc_amount_per_term)
-    print("all:", len(term_counts_in_docs_dict), "doc_amount_per_term:", doc_amount_per_term, "idf:", idf)
-    return ['empty']
+    tfidf_score = TFIDFCounter.count_TFIDF(tf, idf, join_postings_list)
+    # Example: tfidf_score = {'1002': 3.0, '1003': 2.25, '1005': 1.5}
+    return tfidf_score
 
 
 def get_terms_freq_per_doc(term_counts_in_docs_dict: dict, selected_postings_dict: dict):

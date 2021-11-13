@@ -14,7 +14,7 @@ def process_query(postings_dict, main_file_name='simple-sample.txt', query_file_
         outputHandler.write_selected_postings(selected_postings_dict, result_file_name)
         outputHandler.write_query(query, intercept_with_skips_list, result_file_name)  # write and query
         outputHandler.write_query(query, join_postings_list, result_file_name, is_and=False)  # write or query
-        scoreCounter.find_score(docs_for_TFIDF_dict, term_counts_in_docs_dict, selected_postings_dict, join_postings_list)
+        tfidf_score = scoreCounter.find_tfidf_score(docs_for_TFIDF_dict, term_counts_in_docs_dict, selected_postings_dict, join_postings_list)
 
 
 def TFIDF_preparation(main_file_name):
