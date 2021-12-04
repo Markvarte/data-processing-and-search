@@ -2,6 +2,7 @@ from IOfilesHandler import inputHandler, outputHandler
 from invertedIndex import postingsHandler
 from TFIDF import scoreCounter, termCounter
 from queryHandler import queryOR, queryAND
+from permutationIndex import RotationsCreator, permutationIndexCreator
 
 
 def process_query(postings_dict, main_file_name='sample.txt', query_file_name='query.txt', result_file_name='result.txt'):
@@ -26,3 +27,11 @@ def TFIDF_preparation(main_file_name):
     # Example: {'1000': Counter({'Thi': 1, 'Jane': 1, 'Austen': 1}), '1001': Counter({'is': 2, 'This': 1, 's': 1}), ...}
     term_counts_in_docs_dict = termCounter.each_term_count_in_doc(docs_for_TFIDF_dict)
     return docs_for_TFIDF_dict, term_counts_in_docs_dict
+
+
+def process_substitute_query(postings_dict, template_file_name='template.txt', result_file_name='result.txt'):
+    template_list = inputHandler.split_query(template_file_name)
+    rotations_dict = RotationsCreator.create_rotations(postings_dict.keys())
+    for template in template_list:
+        result_postings = permutationIndexCreator.get_postings_by_template(postings_dict, rotations_dict, template)
+        #  outputHandler.write_selected_postings(selected_postings_dict, result_file_name)
