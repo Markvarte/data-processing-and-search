@@ -30,8 +30,9 @@ def TFIDF_preparation(main_file_name):
 
 
 def process_substitute_query(postings_dict, template_file_name='template.txt', result_file_name='result.txt'):
-    template_list = inputHandler.split_query(template_file_name)
+    all_template_list = inputHandler.split_query(template_file_name)
     rotations_dict = RotationsCreator.create_rotations(postings_dict.keys())
-    for template in template_list:
-        result_postings = permutationIndexCreator.get_postings_by_template(postings_dict, rotations_dict, template)
-        #  outputHandler.write_selected_postings(selected_postings_dict, result_file_name)
+    for template_list in all_template_list:
+        for template in template_list:
+            result_postings = permutationIndexCreator.get_postings_by_template(postings_dict, rotations_dict, template)
+            outputHandler.write_wild_card(template, result_postings, result_file_name)
